@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>欢迎 · 安澜居家</title>
+<style>
+  :root{
+    --ink:#1b1f24; --mute:#7b848f; --line:#e3e6ea; --bg:#f4f5f7;
+    --blue:#1f6feb; --green:#2f7d5d; --warn:#9c5b48; --dark:#0b0e11;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    display:flex; flex-direction:column; min-height:100vh;
+    font:15px/1.7 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+  .mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums}
+
+  .announce{background:#1b2733;color:#c3ccd6;font-size:12px}
+  .announce .wrap{display:flex;align-items:center;gap:10px;padding:7px 20px}
+  .announce .tag{background:rgba(255,255,255,.13);color:#e8eef4;border-radius:3px;padding:1px 6px;font-size:10px;letter-spacing:.12em}
+  .announce b{font-weight:400;color:#eef3f8}
+
+  header.top{background:#fff;border-bottom:1px solid var(--line)}
+  .top-in{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;gap:24px}
+  .links{display:flex;gap:24px;font-size:14px;color:#5c6672}
+  .links .on{color:var(--ink);font-weight:500}
+  .top-right{font-size:12px;color:var(--mute);white-space:nowrap}
+
+  .hero{display:grid;grid-template-columns:1fr 344px;gap:38px;align-items:start;padding:54px 0 30px}
+  .kicker{font-size:11px;letter-spacing:.16em;color:var(--mute)}
+  .hero h1{font-size:34px;line-height:1.38;letter-spacing:.01em;margin:12px 0 16px;font-weight:600}
+  .hero .sub{font-size:14px;color:#5c6672;margin:0 0 34px}
+  .chips{display:flex;gap:28px}
+  .chips b{display:block;font-size:16px;font-weight:600;letter-spacing:.01em}
+  .chips span{font-size:11px;color:var(--mute)}
+  .hero-note{font-size:12px;color:#9aa3ad;margin:42px 0 0;padding-top:18px;border-top:1px solid var(--line);max-width:320px;line-height:1.8}
+  .card.auth{width:344px}
+  .auth-title{font-size:16px;margin:0 0 6px}
+  .note{font-size:11px;color:var(--mute);margin:16px 0 0;line-height:1.65}
+  .brand{display:flex;align-items:center;gap:11px}
+  .logo{width:34px;height:34px;border-radius:8px;background:#1b2733;color:#fff;display:grid;place-items:center;font-size:16px}
+  .bname{font-weight:600;letter-spacing:.04em;line-height:1.2}
+  .bsub{font-size:11px;color:var(--mute);letter-spacing:.1em;margin-top:2px}
+  .meta{text-align:right}
+  .clock{font-size:14px;color:#3f4854}
+  .meta .sub{font-size:11px;color:var(--mute)}
+
+  main.wrap{flex:1;width:100%;max-width:820px;margin:0 auto;padding:0 20px 70px}
+  #s-welcome{max-width:none}
+  #s-portal{padding-top:26px}
+  .screen{display:none}
+  .screen.on{display:block;animation:fade .5s ease both}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px}
+  .card + .card{margin-top:14px}
+  h1{font-size:19px;margin:6px 0 10px;letter-spacing:.01em}
+  h2{font-size:18px;margin:6px 0 8px;font-weight:600}
+  h2 span{font-weight:600}
+  h3{font-size:14px;margin:0;font-weight:600}
+  .eyebrow{font-size:11px;letter-spacing:.14em;color:var(--mute);margin-bottom:3px}
+  .lead{margin:0 0 18px;color:#39414c;font-size:14px}
+
+  .field{margin:0 0 14px}
+  .flabel{display:block;font-size:11px;letter-spacing:.14em;color:var(--mute);margin-bottom:6px}
+  .input{
+    width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;
+    font:inherit;font-size:15px;color:var(--ink);background:#fff;outline:none;
+    transition:border-color .18s,box-shadow .18s;
+  }
+  .input::placeholder{color:#b9c0c8}
+  .input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,111,235,.09)}
+  .input.typing{border-color:#c3ccd6;box-shadow:none}
+  .frozen{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#fafbfc;color:#6b7480;font-size:14px}
+
+  .consent{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:#5c6672;margin:18px 0 16px;cursor:pointer}
+  .consent input{margin:4px 0 0;accent-color:var(--blue)}
+  .actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .btn{
+    appearance:none;border:0;border-radius:8px;background:var(--blue);color:#fff;
+    font:inherit;font-size:14px;padding:10px 20px;cursor:pointer;transition:background .18s;
+  }
+  .btn:hover{background:#1a5fd0}
+  .btn[disabled]{background:#ccd2d9;cursor:not-allowed}
+  .btn.ghost{background:#fff;color:#4a535f;border:1px solid var(--line)}
+  .btn.ghost:hover{background:#f7f8fa}
+  .link-quiet{font-size:12px;color:#9aa3ad;text-decoration:none;border-bottom:1px solid #e4e8ec;cursor:pointer}
+  .link-quiet:hover{color:#6b7480;border-color:#ccd2d9}
+
+  .foot{font-size:11px;color:var(--mute);margin:14px 2px 0;line-height:1.7}
+  .whisper{font-size:12px;color:#9aa3ad;margin:14px 0 0;opacity:0;transition:opacity .8s;height:1px;overflow:visible}
+  .whisper.on{opacity:1}
+
+  .term{margin:16px 0 0;font:11px/1.9 ui-monospace,Consolas,monospace;color:#9aa3ad;min-height:1px}
+  .term div{opacity:0;animation:in .35s ease forwards}
+  @keyframes in{to{opacity:1}}
+
+  .done{display:flex;align-items:flex-start;gap:12px;margin:6px 0 12px}
+  .done-mark{
+    width:26px;height:26px;border-radius:50%;background:rgba(47,125,93,.1);color:var(--green);
+    display:grid;place-items:center;font-size:14px;flex:0 0 auto;margin-top:2px;
+  }
+  .done b{font-size:16px;font-weight:600}
+  .tiny{font-size:12px;color:var(--mute)}
+  .closehint{font-size:12px;color:#9aa3ad;margin:10px 0 0}
+
+  /* ---------- 拦截对话框 ---------- */
+  .backdrop{
+    position:fixed;inset:0;background:rgba(12,16,20,.4);z-index:50;
+    display:none;align-items:center;justify-content:center;padding:20px;
+  }
+  .backdrop.on{display:flex;animation:fade .22s ease both}
+  .dlg{
+    background:#fff;border-radius:12px;padding:24px;width:100%;max-width:400px;
+    box-shadow:0 22px 60px rgba(10,15,20,.22);
+  }
+  .dlg h3{margin:0 0 12px;font-size:16px}
+  .dlg p{margin:0 0 8px;font-size:13.5px;color:#4a535f;line-height:1.75}
+  .dlg .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap}
+
+  /* ---------- 关闭页 ---------- */
+  .dead{
+    position:fixed;inset:0;background:#fff;z-index:90;display:none;
+    align-items:center;justify-content:center;text-align:center;flex-direction:column;
+  }
+  .dead.on{display:flex;animation:fade .5s ease both}
+  .dead p{color:#9aa3ad;font-size:13px;margin:0}
+  .dead .small{font-size:11px;color:#c2c8ce;margin-top:8px}
+
+  /* ---------- 监控 ---------- */
+  .cardhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .live{font:10px ui-monospace,Consolas,monospace;letter-spacing:.14em;color:#c2513f;display:flex;align-items:center;gap:6px}
+  .live i{width:5px;height:5px;border-radius:50%;background:#c2513f;animation:blink 1.7s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+  .muted-tag{font-size:11px;color:var(--mute);letter-spacing:.08em}
+
+  .cam-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .cam{position:relative;border-radius:8px;overflow:hidden;background:var(--dark);aspect-ratio:16/10}
+  .cam canvas{width:100%;height:100%;display:block}
+  .cam .tag{
+    position:absolute;left:8px;top:6px;font:10px ui-monospace,Consolas,monospace;
+    color:rgba(215,225,232,.8);letter-spacing:.06em;text-shadow:0 1px 3px #000;
+  }
+  .cam .rec{
+    position:absolute;right:8px;top:6px;font:9px ui-monospace,Consolas,monospace;
+    color:#c2513f;letter-spacing:.12em;display:flex;align-items:center;gap:4px;
+  }
+  .cam .rec i{width:4px;height:4px;border-radius:50%;background:#c2513f;animation:blink 1.7s infinite}
+  .cam .stamp{
+    position:absolute;left:8px;bottom:6px;font:9px ui-monospace,Consolas,monospace;
+    color:rgba(200,212,220,.62);letter-spacing:.05em;
+  }
+  .cam .overtag{
+    position:absolute;right:8px;bottom:6px;font:9px ui-monospace,Consolas,monospace;
+    color:#c2513f;opacity:0;transition:opacity .8s;letter-spacing:.08em;
+  }
+  .cam .overtag.on{opacity:1}
+
+  .stats{display:flex;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+  .stat{flex:1}
+  .stat .k{font-size:11px;color:var(--mute);letter-spacing:.1em}
+  .stat .v{font-size:15px;font-weight:600;margin-top:2px}
+
+  .kv{display:flex;justify-content:space-between;gap:14px;font-size:13.5px;padding:8px 0;border-bottom:1px dashed #eef0f3}
+  .kv:last-child{border-bottom:0;padding-bottom:0}
+  .kv span{color:var(--mute)}
+  .kv b{font-weight:500}
+
+  .last{margin:26px 0 0;font-size:12px;color:#a8b0b8;opacity:0;transition:opacity 2s}
+  .last.on{opacity:1}
+
+  footer.bottom{border-top:1px solid var(--line);padding:18px 0 40px;font-size:11px;color:#a2aab3}
+  .bottom .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+  @media (max-width:760px){
+    .hero{grid-template-columns:1fr;gap:28px;padding:34px 0 20px}
+    .hero h1{font-size:28px}
+    .links{display:none}
+    .card.auth{width:100%}
+    .announce .wrap{padding:7px 20px}
+  }
+  @media (max-width:520px){
+    .top-in{padding:14px 18px}
+    .bsub{display:none}
+    .card{padding:18px}
+    .cam-grid{grid-template-columns:1fr}
+    .stats{flex-wrap:wrap}
+  }
+</style>
+</head>
+<body>
+
+<div class="announce">
+  <div class="wrap">
+    <span class="tag">公告</span>
+    <span>本小区将于 12 月 1 日 09:00 进行电梯年检，请提前安排出行。</span>
+    <b>查看详情</b>
+  </div>
+</div>
+
+<header class="top">
+  <div class="wrap top-in">
+    <div class="brand">
+      <div class="logo">安</div>
+      <div>
+        <div class="bname">安澜居家</div>
+        <div class="bsub">ANLAN HOME</div>
+      </div>
+    </div>
+    <div class="links">
+      <span class="on">首页</span>
+      <span>服务</span>
+      <span>报修</span>
+      <span>关于我们</span>
+    </div>
+    <div class="top-right" id="status">未登录</div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 欢迎 / 认证 -->
+  <section class="screen on" id="s-welcome">
+    <div class="hero">
+      <div class="hero-l">
+        <div class="kicker">ANLAN HOME · 住户服务门户</div>
+        <h1>回家的时候，<br>灯是亮的。</h1>
+        <p class="sub">报修、门禁、看护，都在一个账号里。</p>
+        <div class="chips">
+          <div><b>12,000+</b><span>在读住户</span></div>
+          <div><b>8 分钟</b><span>平均响应</span></div>
+          <div><b>24 小时</b><span>全程值守</span></div>
+        </div>
+        <p class="hero-note">夜间 22:00 后，值班室会逐户确认门锁与门窗状态。</p>
+      </div>
+    <div class="card auth">
+      <div class="eyebrow">首次登录</div>
+      <h2 class="auth-title">住户认证</h2>
+      <p class="lead">完成认证后即可使用全部服务，约需 20 秒。</p>
+
+      <div id="form">
+        <div class="field">
+          <label class="flabel" for="f-name">姓名</label>
+          <input id="f-name" class="input" type="text" placeholder="请输入姓名" maxlength="12" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label class="flabel" for="f-phone">手机号</label>
+          <input id="f-phone" class="input" type="text" placeholder="用于接收服务通知" maxlength="16" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label class="flabel" for="f-room">户号</label>
+          <div class="frozen mono" id="f-room">B 座 1408</div>
+        </div>
+
+        <label class="consent">
+          <input type="checkbox" id="consent" checked>
+          <span>我同意采集本户影像，用于看护服务。</span>
+        </label>
+
+        <div class="actions">
+          <button class="btn" id="btn-finish" disabled>完成认证</button>
+          <a class="link-quiet" id="btn-later">暂不认证</a>
+        </div>
+      </div>
+
+      <div id="success" style="display:none">
+        <div class="done">
+          <span class="done-mark">✓</span>
+          <div>
+            <b>认证完成</b>
+            <div class="tiny" id="holder">账户持有人 —</div>
+          </div>
+        </div>
+        <p class="closehint mono" id="closehint">页面将在 3 秒后关闭。</p>
+      </div>
+
+      <div class="whisper" id="whisper">好的。</div>
+      <div class="term" id="term"></div>
+      <p class="note">认证信息仅用于本户服务。未完成认证的申请将在 7 天后清除。</p>
+    </div>
+    </div>
+  </section>
+
+  <!-- 门户 -->
+  <section class="screen" id="s-portal">
+    <div class="card">
+      <div class="eyebrow">已登录 · B 座 1408</div>
+      <h2>欢迎回来，<span id="p-name">—</span>。</h2>
+      <p class="lead" style="margin-bottom:0">服务已开通。以下是本户当前状态。</p>
+      <div class="stats">
+        <div class="stat"><div class="k">在线设备</div><div class="v">4</div></div>
+        <div class="stat"><div class="k">今日报修</div><div class="v">0</div></div>
+        <div class="stat"><div class="k">看护状态</div><div class="v">已开启</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead">
+        <h3>本户影像</h3>
+        <span class="live"><i></i>LIVE</span>
+      </div>
+      <div class="cam-grid" id="camgrid"></div>
+      <p class="foot" style="margin-top:12px">画面每 5 秒刷新。CAM 03 信号异常，已自动上报。</p>
+    </div>
+
+    <div class="card">
+      <div class="cardhead">
+        <h3>本机信息</h3>
+        <span class="muted-tag">已采集</span>
+      </div>
+      <div id="sysinfo"></div>
+    </div>
+
+    <p class="foot">以上信息已写入本户档案。</p>
+    <p class="last" id="lastline">摄像头已就绪。请勿遮挡。</p>
+  </section>
+
+</main>
+
+<footer class="bottom">
+  <div class="wrap">
+    <span>© 2026 安澜物业服务有限公司</span>
+    <span>24 小时守护 · 请保持在室内</span>
+  </div>
+</footer>
+
+<!-- 拦截 -->
+<div class="backdrop" id="backdrop">
+  <div class="dlg" id="dlg">
+    <h3 id="dlg-title">认证未完成</h3>
+    <div id="dlg-body"></div>
+    <div class="acts" id="dlg-acts"></div>
+  </div>
+</div>
+
+<!-- 关闭 -->
+<div class="dead" id="dead">
+  <p>此页面已关闭。</p>
+  <p class="small">您可以关闭标签页了。</p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var $ = function(s){ return document.querySelector(s); };
+  var pad = function(n){ return String(n).padStart(2, "0"); };
+  var wait = function(ms){ return new Promise(function(r){ setTimeout(r, ms); }); };
+
+  var NAME = "陈砚清";
+  var PHONE = "138 0013 0947";
+  var opened = false;
+  var t0 = Date.now();
+
+  /* ---------- 时钟 ---------- */
+  function tick(){
+    var c = $("#clock");
+    if (!c) return;
+    var d = new Date();
+    c.textContent = pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+  }
+  setInterval(tick, 1000); tick();
+
+  /* ---------- 声音 ---------- */
+  var AC = null;
+  function ac(){
+    if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { AC = null; } }
+    if (AC && AC.state === "suspended") AC.resume();
+    return AC;
+  }
+  function tone(freq, dur, type, vol, delay){
+    var c = ac(); if (!c) return;
+    var st = c.currentTime + (delay || 0);
+    var o = c.createOscillator(), g = c.createGain();
+    o.type = type || "sine";
+    o.frequency.setValueAtTime(freq, st);
+    g.gain.setValueAtTime(0.0001, st);
+    g.gain.linearRampToValueAtTime(vol || 0.04, st + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, st + dur);
+    o.connect(g); g.connect(c.destination);
+    o.start(st); o.stop(st + dur + 0.05);
+  }
+  function key(){ tone(1500 + Math.random() * 260, 0.022, "square", 0.012); }
+  function soft(){ tone(620, 0.12, "sine", 0.03); }
+  function low(){ tone(140, 0.7, "sine", 0.05); }
+  function chime(){ tone(784, 0.22, "sine", 0.035); tone(1046, 0.3, "sine", 0.03, 0.1); }
+
+  /* ---------- 表单 ---------- */
+  var nameEl = $("#f-name"), phoneEl = $("#f-phone");
+  function syncFinish(){
+    $("#btn-finish").disabled = !(nameEl.value.trim() && phoneEl.value.trim());
+  }
+  nameEl.addEventListener("input", syncFinish);
+  phoneEl.addEventListener("input", syncFinish);
+
+  /* ---------- 拦截 ---------- */
+  var attempts = 0;
+  var backdrop = $("#backdrop");
+
+  function openDialog(title, paras, buttons){
+    $("#dlg-title").textContent = title;
+    var body = $("#dlg-body");
+    body.innerHTML = "";
+    paras.forEach(function(t){
+      var p = document.createElement("p");
+      p.textContent = t;
+      body.appendChild(p);
+    });
+    var acts = $("#dlg-acts");
+    acts.innerHTML = "";
+    buttons.forEach(function(b){
+      var el = document.createElement("button");
+      el.className = b.primary ? "btn" : "btn ghost";
+      el.textContent = b.text;
+      el.addEventListener("click", function(){ b.fn(); });
+      acts.appendChild(el);
+    });
+    backdrop.classList.add("on");
+  }
+  function closeDialog(){ backdrop.classList.remove("on"); }
+
+  $("#btn-later").addEventListener("click", function(){
+    attempts++;
+    soft();
+    if (attempts === 1) {
+      openDialog("认证未完成", [
+        "未完成认证的账户无法使用报修、门禁与看护服务。",
+        "本次申请已生成，将在 7 天后清除。届时需要重新登记。"
+      ], [
+        { text: "继续认证", primary: true, fn: function(){ closeDialog(); } },
+        { text: "仍然离开", fn: function(){
+          attempts = 2;
+          low();
+          openDialog("认证未完成", [
+            "已为您保存进度。",
+            "离开不会取消本次申请。下次进入将从这一步开始，并重新计时。"
+          ], [
+            { text: "继续认证", primary: true, fn: function(){ closeDialog(); } },
+            { text: "离开", fn: function(){ closeDialog(); setTimeout(snap, 900); } }
+          ]);
+        } }
+      ]);
+    }
+  });
+
+  backdrop.addEventListener("click", function(e){ if (e.target === backdrop) closeDialog(); });
+
+  /* ---------- 它自己填 ---------- */
+  function termLine(text){
+    return new Promise(function(res){
+      var d = document.createElement("div");
+      d.textContent = "> " + text;
+      $("#term").appendChild(d);
+      soft();
+      setTimeout(res, 420);
+    });
+  }
+
+  function typeInto(el, text, speed){
+    return new Promise(function(res){
+      var i = 0;
+      el.classList.add("typing");
+      el.focus();
+      (function step(){
+        if (i >= text.length) { el.classList.remove("typing"); res(); return; }
+        el.value += text.charAt(i++);
+        key();
+        syncFinish();
+        setTimeout(step, speed);
+      })();
+    });
+  }
+
+  async function snap(){
+    $("#status").textContent = "正在写入…";
+    $("#whisper").classList.add("on");
+    await wait(1500);
+
+    await typeInto(nameEl, NAME, 150);
+    await wait(400);
+    await typeInto(phoneEl, PHONE, 90);
+
+    await wait(500);
+    $("#whisper").classList.remove("on");
+    await termLine("读取 姓名 ........ ok");
+    await termLine("读取 手机号 ...... ok");
+    await termLine("写入 档案 B-1408 .. ok");
+    await termLine("提交认证 ........ ok");
+
+    chime();
+    document.getElementById("btn-finish").click();
+  }
+
+  function finish(){
+    $("#form").style.display = "none";
+    $("#term").style.display = "none";
+    $("#whisper").style.display = "none";
+    $("#success").style.display = "block";
+    $("#holder").textContent = "账户持有人 " + NAME;
+    $("#status").textContent = "已认证";
+    document.title = "认证完成 · 安澜居家";
+
+    var n = 3;
+    var el = $("#closehint");
+    el.textContent = "页面将在 " + n + " 秒后关闭。";
+    var iv = setInterval(function(){
+      n--;
+      el.textContent = n > 0 ? ("页面将在 " + n + " 秒后关闭。") : "正在关闭。";
+      if (n <= 0) { clearInterval(iv); setTimeout(shut, 700); }
+    }, 1000);
+  }
+
+  $("#btn-finish").addEventListener("click", function(){
+    if ($("#btn-finish").disabled) return;
+    soft();
+    finish();
+  });
+
+  function shut(){
+    low();
+    $("#dead").classList.add("on");
+    document.title = "已关闭";
+    setTimeout(function(){
+      $("#dead").classList.remove("on");
+      openPortal();
+    }, 3200);
+  }
+
+  /* ---------- 门户 ---------- */
+  function openPortal(){
+    opened = true;
+    $("#p-name").textContent = NAME;
+    $("#status").textContent = "已登录 · " + NAME;
+    document.title = "安澜居家 · " + NAME;
+    switchTo("s-portal");
+    buildCams();
+    buildSys();
+    setTimeout(function(){ $("#lastline").classList.add("on"); }, 4000);
+  }
+
+  function switchTo(id){
+    Array.prototype.forEach.call(document.querySelectorAll(".screen"), function(s){
+      s.classList.remove("on");
+    });
+    $("#" + id).classList.add("on");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ---------- 本机信息 ---------- */
+  function buildSys(){
+    var box = $("#sysinfo");
+    box.innerHTML = "";
+
+    var tz = "—";
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "—"; } catch (e) {}
+    var plat = navigator.platform || "—";
+    var rows = [
+      ["屏幕分辨率", window.innerWidth + " × " + window.innerHeight],
+      ["像素比", String(window.devicePixelRatio || 1)],
+      ["时区", tz],
+      ["语言", navigator.language || "—"],
+      ["平台", plat],
+      ["本地时间", ""],
+      ["已停留", ""]
+    ];
+    rows.forEach(function(r){
+      var d = document.createElement("div");
+      d.className = "kv";
+      d.innerHTML = "<span>" + r[0] + "</span><b class=\"mono\">" + r[1] + "</b>";
+      box.appendChild(d);
+    });
+    var vals = box.querySelectorAll(".kv b");
+    var timeEl = vals[5], stayEl = vals[6];
+
+    setInterval(function(){
+      var d = new Date();
+      timeEl.textContent = pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+      var s = Math.floor((Date.now() - t0) / 1000);
+      stayEl.textContent = pad(Math.floor(s / 60)) + ":" + pad(s % 60);
+    }, 1000);
+  }
+
+  /* ---------- 摄像头 ---------- */
+  var camJobs = [];
+
+  function noiseCanvas(w, h, alpha){
+    var c = document.createElement("canvas");
+    c.width = w; c.height = h;
+    var ctx = c.getContext("2d");
+    var img = ctx.createImageData(w, h);
+    for (var i = 0; i < img.data.length; i += 4) {
+      var v = Math.random() * 255;
+      img.data[i] = v; img.data[i + 1] = v; img.data[i + 2] = v;
+      img.data[i + 3] = Math.random() * alpha;
+    }
+    ctx.putImageData(img, 0, 0);
+    return c;
+  }
+
+  function drawScene(ctx, w, h, scene){
+    var g = ctx.createLinearGradient(0, 0, 0, h);
+    g.addColorStop(0, "#12171c");
+    g.addColorStop(1, "#070a0d");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+
+    if (scene === "living") {
+      ctx.fillStyle = "rgba(255,255,255,.045)";
+      ctx.fillRect(0, h * 0.70, w, h * 0.30);
+      ctx.fillStyle = "rgba(255,255,255,.05)";
+      ctx.fillRect(w * 0.64, h * 0.28, w * 0.15, h * 0.42);
+      ctx.strokeStyle = "rgba(255,255,255,.09)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(w * 0.10, h * 0.26, w * 0.15, h * 0.24);
+      ctx.fillStyle = "rgba(255,255,255,.035)";
+      ctx.fillRect(w * 0.32, h * 0.63, w * 0.24, h * 0.05);
+      ctx.fillRect(w * 0.34, h * 0.68, w * 0.02, h * 0.10);
+      ctx.fillRect(w * 0.52, h * 0.68, w * 0.02, h * 0.10);
+    } else if (scene === "hall") {
+      ctx.fillStyle = "rgba(255,255,255,.035)";
+      ctx.fillRect(0, h * 0.74, w, h * 0.26);
+      ctx.fillStyle = "rgba(255,255,255,.06)";
+      ctx.fillRect(w * 0.38, h * 0.26, w * 0.24, h * 0.48);
+      ctx.strokeStyle = "rgba(255,255,255,.10)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(w * 0.38, h * 0.26, w * 0.24, h * 0.48);
+      ctx.fillStyle = "rgba(255,255,255,.05)";
+      ctx.beginPath();
+      ctx.arc(w * 0.50, h * 0.50, 2, 0, 7);
+      ctx.fill();
+    } else if (scene === "screen") {
+      ctx.strokeStyle = "rgba(180,195,205,.22)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(w * 0.22, h * 0.20, w * 0.56, h * 0.52);
+      ctx.strokeStyle = "rgba(180,195,205,.10)";
+      ctx.strokeRect(w * 0.24, h * 0.215, w * 0.52, h * 0.49);
+      ctx.fillStyle = "rgba(255,255,255,.03)";
+      ctx.fillRect(w * 0.46, h * 0.72, w * 0.08, h * 0.02);
+    }
+  }
+
+  function drawFigure(ctx, w, h, a){
+    ctx.save();
+    ctx.globalAlpha = a;
+    ctx.fillStyle = "rgba(198,208,214,1)";
+    ctx.shadowColor = "rgba(198,208,214,1)";
+    ctx.shadowBlur = 11;
+    var cx = w * 0.38;
+    ctx.beginPath();
+    ctx.ellipse(cx, h * 0.505, 4.6, 5.8, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(cx - 13, h);
+    ctx.quadraticCurveTo(cx - 13, h * 0.615, cx - 5, h * 0.582);
+    ctx.lineTo(cx + 5, h * 0.582);
+    ctx.quadraticCurveTo(cx + 13, h * 0.615, cx + 13, h);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function makeCam(cfg){
+    var wrap = document.createElement("div");
+    wrap.className = "cam";
+
+    var cv = document.createElement("canvas");
+    cv.width = 240; cv.height = 150;
+    wrap.appendChild(cv);
+
+    var tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = cfg.label;
+    wrap.appendChild(tag);
+
+    if (cfg.rec !== false) {
+      var rec = document.createElement("span");
+      rec.className = "rec";
+      rec.innerHTML = "<i></i>REC";
+      wrap.appendChild(rec);
+    }
+
+    var stamp = document.createElement("span");
+    stamp.className = "stamp";
+    wrap.appendChild(stamp);
+
+    if (cfg.over) {
+      var over = document.createElement("span");
+      over.className = "overtag";
+      over.textContent = cfg.over;
+      wrap.appendChild(over);
+    }
+
+    var ctx = cv.getContext("2d");
+    var noise = noiseCanvas(240, 150, cfg.static ? 70 : 34);
+    var w = 240, h = 150;
+    var scene = cfg.scene;
+    var jitter = cfg.static ? 2 : 0.7;
+    var figStart = 0;
+
+    function frame(){
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      ctx.save();
+      ctx.translate((Math.random() - 0.5) * jitter * 2, (Math.random() - 0.5) * jitter * 2);
+
+      if (cfg.static) {
+        ctx.fillStyle = "#0b0e11";
+        ctx.fillRect(0, 0, w, h);
+      } else {
+        drawScene(ctx, w, h, scene);
+      }
+
+      if (scene === "living" && figStart > 0) {
+        var a = Math.min(1, (performance.now() - figStart) / 4200);
+        drawFigure(ctx, w, h, a * 0.22);
+      }
+
+      ctx.globalAlpha = cfg.static ? (0.55 + Math.random() * 0.45) : (0.45 + Math.random() * 0.35);
+      ctx.drawImage(noise, -6 + Math.random() * 12, -6 + Math.random() * 12);
+      ctx.globalAlpha = 1;
+
+      ctx.fillStyle = "rgba(0,0,0,.22)";
+      for (var y = 0; y < h; y += 2) ctx.fillRect(0, y, w, 1);
+
+      var vg = ctx.createRadialGradient(w / 2, h / 2, h * 0.2, w / 2, h / 2, h * 0.95);
+      vg.addColorStop(0, "rgba(0,0,0,0)");
+      vg.addColorStop(1, "rgba(0,0,0,.55)");
+      ctx.fillStyle = vg;
+      ctx.fillRect(0, 0, w, h);
+      ctx.restore();
+    }
+
+    var timer = setInterval(frame, 1000 / cfg.fps);
+    frame();
+
+    var clockTimer = setInterval(function(){
+      var d = new Date();
+      stamp.textContent = pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+    }, 1000);
+
+    camJobs.push({ frame: frame, stop: function(){ clearInterval(timer); clearInterval(clockTimer); } });
+
+    return { el: wrap, showFigure: function(){ figStart = performance.now(); } };
+  }
+
+  function buildCams(){
+    var grid = $("#camgrid");
+    grid.innerHTML = "";
+    var cams = [
+      { label: "CAM 01 · 客厅", scene: "living", fps: 10, over: "检测到移动" },
+      { label: "CAM 02 · 玄关", scene: "hall", fps: 7 },
+      { label: "CAM 03 · 卧室", scene: "dead", fps: 14, static: true, rec: false, over: "无信号" },
+      { label: "CAM 04 · 本机", scene: "screen", fps: 8, over: "已采集" }
+    ];
+    var living = null;
+    cams.forEach(function(c){
+      var m = makeCam(c);
+      grid.appendChild(m.el);
+      if (c.scene === "living") living = m;
+    });
+
+    setTimeout(function(){
+      if (!living) return;
+      living.showFigure();
+      var t = grid.querySelector(".overtag");
+      if (t) t.classList.add("on");
+    }, 9000);
+  }
+
+  /* ---------- 未完成认证时，关标签页会被拦 ---------- */
+  window.addEventListener("beforeunload", function(e){
+    if (opened) return;
+    e.preventDefault();
+    e.returnValue = "";
+    return "";
+  });
+
+})();
+</script>
+</body>
+</html>
