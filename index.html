@@ -987,7 +987,7 @@
   function drawFigure(ctx, w, h, a, zoom){
     var zz = zoom || 1;
     var cx = w * 0.38;
-    var sway = Math.sin(performance.now() / 1500) * (1.1 * zz);
+    var sway = Math.sin(performance.now() / 1700) * (0.9 * zz);
 
     ctx.save();
     ctx.globalAlpha = a;
@@ -995,70 +995,70 @@
     ctx.scale(zz, zz);
     ctx.translate(-cx, -h);
 
-    var headY = h * 0.335;
-    var g = ctx.createLinearGradient(0, headY - 12, 0, h);
-    g.addColorStop(0, "rgba(212,220,225,.95)");
-    g.addColorStop(0.45, "rgba(180,190,197,.85)");
-    g.addColorStop(1, "rgba(140,150,158,.55)");
+    var headY = h * 0.305;
+    var g = ctx.createLinearGradient(0, headY - 10, 0, h);
+    g.addColorStop(0, "rgba(208,216,222,.95)");
+    g.addColorStop(0.5, "rgba(172,182,190,.82)");
+    g.addColorStop(1, "rgba(132,142,150,.5)");
     ctx.fillStyle = g;
 
     // 头
     ctx.beginPath();
-    ctx.ellipse(cx, headY, 8.4, 10.8, 0, 0, Math.PI * 2);
+    ctx.ellipse(cx, headY, 7, 9.2, 0, 0, Math.PI * 2);
     ctx.fill();
 
     // 颈
     ctx.beginPath();
-    ctx.moveTo(cx - 5.5, headY + 8);
-    ctx.lineTo(cx - 6.5, h * 0.372);
-    ctx.lineTo(cx + 6.5, h * 0.372);
-    ctx.lineTo(cx + 5.5, headY + 8);
+    ctx.moveTo(cx - 4.2, headY + 7.2);
+    ctx.lineTo(cx - 5, h * 0.338);
+    ctx.lineTo(cx + 5, h * 0.338);
+    ctx.lineTo(cx + 4.2, headY + 7.2);
     ctx.closePath();
     ctx.fill();
 
     // 躯干
     ctx.beginPath();
-    ctx.moveTo(cx - 24, h * 0.402);
-    ctx.quadraticCurveTo(cx - 27, h * 0.47, cx - 18.5, h * 0.615);
-    ctx.lineTo(cx + 18.5, h * 0.615);
-    ctx.quadraticCurveTo(cx + 27, h * 0.47, cx + 24, h * 0.402);
-    ctx.quadraticCurveTo(cx + 11, h * 0.372, cx + 7, h * 0.368);
-    ctx.lineTo(cx - 7, h * 0.368);
-    ctx.quadraticCurveTo(cx - 11, h * 0.372, cx - 24, h * 0.402);
+    ctx.moveTo(cx - 17, h * 0.352);
+    ctx.quadraticCurveTo(cx - 16, h * 0.47, cx - 12.5, h * 0.585);
+    ctx.lineTo(cx + 12.5, h * 0.585);
+    ctx.quadraticCurveTo(cx + 16, h * 0.47, cx + 17, h * 0.352);
+    ctx.quadraticCurveTo(cx + 8, h * 0.335, cx + 5, h * 0.332);
+    ctx.lineTo(cx - 5, h * 0.332);
+    ctx.quadraticCurveTo(cx - 8, h * 0.335, cx - 17, h * 0.352);
     ctx.closePath();
     ctx.fill();
 
     // 手臂
     ctx.beginPath();
-    ctx.moveTo(cx - 23, h * 0.405);
-    ctx.quadraticCurveTo(cx - 30.5, h * 0.50, cx - 28, h * 0.628);
-    ctx.lineTo(cx - 19.5, h * 0.628);
-    ctx.quadraticCurveTo(cx - 21.5, h * 0.50, cx - 16.5, h * 0.412);
+    ctx.moveTo(cx - 16.5, h * 0.355);
+    ctx.quadraticCurveTo(cx - 22.5, h * 0.47, cx - 21, h * 0.60);
+    ctx.lineTo(cx - 16.5, h * 0.60);
+    ctx.quadraticCurveTo(cx - 18, h * 0.47, cx - 12.5, h * 0.36);
     ctx.closePath();
     ctx.fill();
 
     ctx.beginPath();
-    ctx.moveTo(cx + 23, h * 0.405);
-    ctx.quadraticCurveTo(cx + 30.5, h * 0.50, cx + 28, h * 0.628);
-    ctx.lineTo(cx + 19.5, h * 0.628);
-    ctx.quadraticCurveTo(cx + 21.5, h * 0.50, cx + 16.5, h * 0.412);
+    ctx.moveTo(cx + 16.5, h * 0.355);
+    ctx.quadraticCurveTo(cx + 22.5, h * 0.47, cx + 21, h * 0.60);
+    ctx.lineTo(cx + 16.5, h * 0.60);
+    ctx.quadraticCurveTo(cx + 18, h * 0.47, cx + 12.5, h * 0.36);
     ctx.closePath();
     ctx.fill();
 
     // 腿
     ctx.beginPath();
-    ctx.moveTo(cx - 17, h * 0.612);
-    ctx.lineTo(cx - 1.5, h * 0.612);
-    ctx.lineTo(cx - 2.5, h + 3);
-    ctx.lineTo(cx - 15, h + 3);
+    ctx.moveTo(cx - 13, h * 0.583);
+    ctx.lineTo(cx - 2.8, h * 0.583);
+    ctx.lineTo(cx - 3.6, h + 4);
+    ctx.lineTo(cx - 11.5, h + 4);
     ctx.closePath();
     ctx.fill();
 
     ctx.beginPath();
-    ctx.moveTo(cx + 17, h * 0.612);
-    ctx.lineTo(cx + 1.5, h * 0.612);
-    ctx.lineTo(cx + 2.5, h + 3);
-    ctx.lineTo(cx + 15, h + 3);
+    ctx.moveTo(cx + 13, h * 0.583);
+    ctx.lineTo(cx + 2.8, h * 0.583);
+    ctx.lineTo(cx + 3.6, h + 4);
+    ctx.lineTo(cx + 11.5, h + 4);
     ctx.closePath();
     ctx.fill();
 
@@ -1394,7 +1394,7 @@
     function frame(){
       if (killed) return;
       var el = (performance.now() - t0) / 1000;
-      var z = 1 + Math.min(el / 7.5, 1) * 1.1;
+      var z = 1 + Math.min(el / 7.5, 1) * 0.45;
       var a = Math.min(0.36, 0.06 + el * 0.038);
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       drawScene(ctx, 640, 400, "living");
