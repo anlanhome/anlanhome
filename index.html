@@ -1001,7 +1001,7 @@
   function drawFigure(ctx, w, h, a, zoom){
     var zz = zoom || 1;
     var cx = w * 0.38;
-    var sway = Math.sin(performance.now() / 1700) * (0.9 * zz);
+    var sway = Math.sin(performance.now() / 1700) * (0.8 * zz);
 
     ctx.save();
     ctx.globalAlpha = a;
@@ -1009,80 +1009,22 @@
     ctx.scale(zz, zz);
     ctx.translate(-cx, -h);
 
-    var headY = h * 0.305;
-    var g = ctx.createLinearGradient(0, headY - 10, 0, h);
-    g.addColorStop(0, "rgba(13,15,18,.97)");
-    g.addColorStop(0.55, "rgba(8,9,11,.95)");
-    g.addColorStop(1, "rgba(4,5,6,.9)");
-    ctx.fillStyle = g;
-    ctx.strokeStyle = "rgba(196,206,214,.30)";
-    ctx.lineWidth = 1;
-    ctx.shadowColor = "transparent";
-    ctx.shadowBlur = 0;
-    function fs(){ ctx.fill(); ctx.stroke(); }
+    ctx.fillStyle = "#000000";
 
     // 头
     ctx.beginPath();
-    ctx.ellipse(cx, headY, 7, 9.2, 0, 0, Math.PI * 2);
-    fs();
+    ctx.ellipse(cx, h * 0.355, 7.2, 9.2, 0, 0, Math.PI * 2);
+    ctx.fill();
 
-    // 颈
+    // 身体
     ctx.beginPath();
-    ctx.moveTo(cx - 4.2, headY + 7.2);
-    ctx.lineTo(cx - 5, h * 0.338);
-    ctx.lineTo(cx + 5, h * 0.338);
-    ctx.lineTo(cx + 4.2, headY + 7.2);
+    ctx.moveTo(cx - 6.5, h * 0.395);
+    ctx.quadraticCurveTo(cx - 16, h * 0.45, cx - 17.5, h + 4);
+    ctx.lineTo(cx + 17.5, h + 4);
+    ctx.quadraticCurveTo(cx + 16, h * 0.45, cx + 6.5, h * 0.395);
     ctx.closePath();
-    fs();
+    ctx.fill();
 
-    // 躯干
-    ctx.beginPath();
-    ctx.moveTo(cx - 17, h * 0.352);
-    ctx.quadraticCurveTo(cx - 16, h * 0.47, cx - 12.5, h * 0.585);
-    ctx.lineTo(cx + 12.5, h * 0.585);
-    ctx.quadraticCurveTo(cx + 16, h * 0.47, cx + 17, h * 0.352);
-    ctx.quadraticCurveTo(cx + 8, h * 0.335, cx + 5, h * 0.332);
-    ctx.lineTo(cx - 5, h * 0.332);
-    ctx.quadraticCurveTo(cx - 8, h * 0.335, cx - 17, h * 0.352);
-    ctx.closePath();
-    fs();
-
-    // 手臂
-    ctx.beginPath();
-    ctx.moveTo(cx - 16.5, h * 0.355);
-    ctx.quadraticCurveTo(cx - 22.5, h * 0.47, cx - 21, h * 0.60);
-    ctx.lineTo(cx - 16.5, h * 0.60);
-    ctx.quadraticCurveTo(cx - 18, h * 0.47, cx - 12.5, h * 0.36);
-    ctx.closePath();
-    fs();
-
-    ctx.beginPath();
-    ctx.moveTo(cx + 16.5, h * 0.355);
-    ctx.quadraticCurveTo(cx + 22.5, h * 0.47, cx + 21, h * 0.60);
-    ctx.lineTo(cx + 16.5, h * 0.60);
-    ctx.quadraticCurveTo(cx + 18, h * 0.47, cx + 12.5, h * 0.36);
-    ctx.closePath();
-    fs();
-
-    // 腿
-    ctx.beginPath();
-    ctx.moveTo(cx - 13, h * 0.583);
-    ctx.lineTo(cx - 2.8, h * 0.583);
-    ctx.lineTo(cx - 3.6, h + 4);
-    ctx.lineTo(cx - 11.5, h + 4);
-    ctx.closePath();
-    fs();
-
-    ctx.beginPath();
-    ctx.moveTo(cx + 13, h * 0.583);
-    ctx.lineTo(cx + 2.8, h * 0.583);
-    ctx.lineTo(cx + 3.6, h + 4);
-    ctx.lineTo(cx + 11.5, h + 4);
-    ctx.closePath();
-    fs();
-
-    ctx.shadowBlur = 0;
-    ctx.shadowColor = "transparent";
     ctx.restore();
   }
 
@@ -1140,7 +1082,7 @@
 
       if (scene === "living" && figStart > 0) {
         var a = Math.min(1, (performance.now() - figStart) / 4200);
-        drawFigure(ctx, w, h, a * 0.30, zoom);
+        drawFigure(ctx, w, h, a * 0.85, zoom);
       }
 
       ctx.globalAlpha = cfg.static ? (0.55 + Math.random() * 0.45) : (0.45 + Math.random() * 0.35);
@@ -1416,7 +1358,7 @@
       if (killed) return;
       var el = (performance.now() - t0) / 1000;
       var z = 1 + Math.min(el / 7.5, 1) * 0.45;
-      var a = Math.min(0.36, 0.06 + el * 0.038);
+      var a = Math.min(0.9, 0.22 + el * 0.085);
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       drawScene(ctx, 640, 400, "living");
       drawFigure(ctx, 640, 400, a, z);
