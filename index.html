@@ -958,27 +958,27 @@
 
   function drawScene(ctx, w, h, scene){
     var g = ctx.createLinearGradient(0, 0, 0, h);
-    g.addColorStop(0, "#202932");
-    g.addColorStop(1, "#0b0f13");
+    g.addColorStop(0, "#3a4553");
+    g.addColorStop(1, "#131920");
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, w, h);
 
     if (scene === "living") {
-      ctx.fillStyle = "rgba(255,255,255,.075)";
+      ctx.fillStyle = "rgba(255,255,255,.13)";
       ctx.fillRect(0, h * 0.70, w, h * 0.30);
-      ctx.fillStyle = "rgba(255,255,255,.085)";
+      ctx.fillStyle = "rgba(255,255,255,.15)";
       ctx.fillRect(w * 0.64, h * 0.28, w * 0.15, h * 0.42);
-      ctx.strokeStyle = "rgba(255,255,255,.16)";
+      ctx.strokeStyle = "rgba(255,255,255,.26)";
       ctx.lineWidth = 1;
       ctx.strokeRect(w * 0.10, h * 0.26, w * 0.15, h * 0.24);
-      ctx.fillStyle = "rgba(255,255,255,.035)";
+      ctx.fillStyle = "rgba(255,255,255,.07)";
       ctx.fillRect(w * 0.32, h * 0.63, w * 0.24, h * 0.05);
       ctx.fillRect(w * 0.34, h * 0.68, w * 0.02, h * 0.10);
       ctx.fillRect(w * 0.52, h * 0.68, w * 0.02, h * 0.10);
     } else if (scene === "hall") {
-      ctx.fillStyle = "rgba(255,255,255,.035)";
+      ctx.fillStyle = "rgba(255,255,255,.07)";
       ctx.fillRect(0, h * 0.74, w, h * 0.26);
-      ctx.fillStyle = "rgba(255,255,255,.06)";
+      ctx.fillStyle = "rgba(255,255,255,.10)";
       ctx.fillRect(w * 0.38, h * 0.26, w * 0.24, h * 0.48);
       ctx.strokeStyle = "rgba(255,255,255,.10)";
       ctx.lineWidth = 1;
@@ -1011,15 +1011,20 @@
 
     var headY = h * 0.305;
     var g = ctx.createLinearGradient(0, headY - 10, 0, h);
-    g.addColorStop(0, "rgba(208,216,222,.95)");
-    g.addColorStop(0.5, "rgba(172,182,190,.82)");
-    g.addColorStop(1, "rgba(132,142,150,.5)");
+    g.addColorStop(0, "rgba(13,15,18,.97)");
+    g.addColorStop(0.55, "rgba(8,9,11,.95)");
+    g.addColorStop(1, "rgba(4,5,6,.9)");
     ctx.fillStyle = g;
+    ctx.strokeStyle = "rgba(196,206,214,.30)";
+    ctx.lineWidth = 1;
+    ctx.shadowColor = "transparent";
+    ctx.shadowBlur = 0;
+    function fs(){ ctx.fill(); ctx.stroke(); }
 
     // 头
     ctx.beginPath();
     ctx.ellipse(cx, headY, 7, 9.2, 0, 0, Math.PI * 2);
-    ctx.fill();
+    fs();
 
     // 颈
     ctx.beginPath();
@@ -1028,7 +1033,7 @@
     ctx.lineTo(cx + 5, h * 0.338);
     ctx.lineTo(cx + 4.2, headY + 7.2);
     ctx.closePath();
-    ctx.fill();
+    fs();
 
     // 躯干
     ctx.beginPath();
@@ -1040,7 +1045,7 @@
     ctx.lineTo(cx - 5, h * 0.332);
     ctx.quadraticCurveTo(cx - 8, h * 0.335, cx - 17, h * 0.352);
     ctx.closePath();
-    ctx.fill();
+    fs();
 
     // 手臂
     ctx.beginPath();
@@ -1049,7 +1054,7 @@
     ctx.lineTo(cx - 16.5, h * 0.60);
     ctx.quadraticCurveTo(cx - 18, h * 0.47, cx - 12.5, h * 0.36);
     ctx.closePath();
-    ctx.fill();
+    fs();
 
     ctx.beginPath();
     ctx.moveTo(cx + 16.5, h * 0.355);
@@ -1057,7 +1062,7 @@
     ctx.lineTo(cx + 16.5, h * 0.60);
     ctx.quadraticCurveTo(cx + 18, h * 0.47, cx + 12.5, h * 0.36);
     ctx.closePath();
-    ctx.fill();
+    fs();
 
     // 腿
     ctx.beginPath();
@@ -1066,7 +1071,7 @@
     ctx.lineTo(cx - 3.6, h + 4);
     ctx.lineTo(cx - 11.5, h + 4);
     ctx.closePath();
-    ctx.fill();
+    fs();
 
     ctx.beginPath();
     ctx.moveTo(cx + 13, h * 0.583);
@@ -1074,8 +1079,10 @@
     ctx.lineTo(cx + 3.6, h + 4);
     ctx.lineTo(cx + 11.5, h + 4);
     ctx.closePath();
-    ctx.fill();
+    fs();
 
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = "transparent";
     ctx.restore();
   }
 
