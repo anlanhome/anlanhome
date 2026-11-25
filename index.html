@@ -311,6 +311,18 @@
   }
   .flash{position:fixed;inset:0;background:#fff;z-index:101;opacity:0;pointer-events:none;transition:opacity .07s}
 
+  #vig{
+    position:fixed;inset:0;pointer-events:none;z-index:55;
+    background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 52%, rgba(26,17,8,.55) 100%);
+    opacity:var(--dread,0);transition:opacity .6s ease;
+  }
+  .sound{
+    position:fixed;left:18px;bottom:80px;z-index:71;font-size:11px;letter-spacing:.07em;
+    background:rgba(43,36,28,.9);color:#e6ddd2;padding:7px 13px;border-radius:999px;
+    cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.16);transition:background .25s,color .25s;
+  }
+  .sound.on{background:var(--blue);color:#fff}
+
   .act3-done{
     position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
     background:#050607;padding:28px 20px;text-align:center;
@@ -633,7 +645,9 @@
     </div>
   </div>
 </div>
+<div id="vig"></div>
 <div class="flash" id="flash"></div>
+<div class="sound" id="soundBtn">♪ 环境音：关</div>
 
 <div class="cookie" id="cookie">
   <span id="cookieText">本网站使用 Cookie 记录您的访问。继续浏览即视为同意。</span>
@@ -1440,6 +1454,95 @@
     $("#afOk").style.display = "block";
     this.disabled = true;
   });
+
+  /* ---------- 恐惧值：跟着滚动 ---------- */
+  var dread = 0;
+  var dreadTicking = false;
+
+  function applyDread(){
+    document.documentElement.style.setProperty("--dread", (0.06 + dread * 0.5).toFixed(3));
+    if (droneGain && AC) {
+      droneGain.gain.setTargetAtTime(0.012 + dread * 0.05, AC.currentTime, 0.6);
+    }
+  }
+
+  function measureDread(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 40 ? window.scrollY / h : 0;
+    dread = Math.max(0, Math.min(1, p));
+    applyDread();
+  }
+
+  var lastDread = 0;
+  window.addEventListener("scroll", function(){
+    var now = Date.now();
+    if (now - lastDread < 60) return;
+    lastDread = now;
+    measureDread();
+  }, { passive: true });
+  window.addEventListener("resize", measureDread);
+
+  /* ---------- 低频底噪 ---------- */
+  var droneGain = null;
+
+  function buildDrone(){
+    if (droneGain) return true;
+    var c = ac();
+    if (!c) return false;
+    var lpf = c.createBiquadFilter();
+    lpf.type = "lowpass";
+    lpf.frequency.value = 150;
+
+    droneGain = c.createGain();
+    droneGain.gain.value = 0;
+    droneGain.connect(lpf);
+    lpf.connect(c.destination);
+
+    [41, 43.6, 61.7].forEach(function(f){
+      var o = c.createOscillator();
+      o.type = "sawtooth";
+      o.frequency.value = f;
+      var g = c.createGain();
+      g.gain.value = 0.26;
+      o.connect(g);
+      g.connect(droneGain);
+      o.start();
+    });
+    return true;
+  }
+
+  var soundOn = false;
+  $("#soundBtn").addEventListener("click", function(){
+    var c = ac();
+    if (!c) return;
+    if (!soundOn) {
+      if (!buildDrone()) return;
+      soundOn = true;
+      this.classList.add("on");
+      this.textContent = "♪ 环境音：开";
+      c.resume();
+      applyDread();
+    } else {
+      soundOn = false;
+      this.classList.remove("on");
+      this.textContent = "♪ 环境音：关";
+      if (droneGain) droneGain.gain.setTargetAtTime(0, c.currentTime, 0.4);
+    }
+  });
+
+  /* ---------- 离开计时 ---------- */
+  var leftAt = 0;
+  document.addEventListener("visibilitychange", function(){
+    if (document.hidden) {
+      leftAt = Date.now();
+    } else if (leftAt) {
+      var away = Math.round((Date.now() - leftAt) / 1000);
+      leftAt = 0;
+      if (away >= 2) toast("你离开了 " + away + " 秒。");
+    }
+  });
+
+  measureDread();
 
   /* ---------- 导航 ---------- */
   var navLinks = document.querySelectorAll("#nav .navi");
